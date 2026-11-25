@@ -8,7 +8,9 @@ export default function WeatherApp() {
     <WeatherDashboard
       header={
         <>
-          <a className="wx-back" href="#">← Back to Week 12_2</a>
+          <a className="wx-back" href="https://aadi-eee.github.io/webprogramming/#work">
+            ← Back to all assignments
+          </a>
           <div className="wx-title-row">
             <h1 className="wx-title">
               Weather <span className="wx-title-script">today</span>

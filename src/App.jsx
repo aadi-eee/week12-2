@@ -66,6 +66,9 @@ function WeatherPage() {
 function HomePage() {
   return (
     <main className="site wide">
+      <a className="back" href="https://aadi-eee.github.io/webprogramming/#work">
+        ← Back to all assignments
+      </a>
       <h1>
         useEffect & <span className="script">Weather Dashboard</span>
       </h1>
@@ -108,6 +111,9 @@ function HomePage() {
         </Card>
       </div>
 
+      <a className="back" href="https://aadi-eee.github.io/webprogramming/#work">
+        ← Back to all assignments
+      </a>
       <h2 id="practice">Practice exercises</h2>
       <div className="cards">
         <Card
