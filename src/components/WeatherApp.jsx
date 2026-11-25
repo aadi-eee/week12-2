@@ -8,7 +8,7 @@ export default function WeatherApp() {
     <WeatherDashboard
       header={
         <>
-          <a className="wx-back" href="https://aadi-eee.github.io/webprogramming/#work">
+          <a className="wx-back" href="#">
             ← Back to all assignments
           </a>
           <div className="wx-title-row">
