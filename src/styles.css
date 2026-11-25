@@ -13,6 +13,8 @@
 
 * { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 body {
   margin: 0;
   padding: 40px 20px;
@@ -48,6 +50,22 @@ h1 {
 }
 h1 .script { font-size: 1.2em; color: var(--maroon); }
 .lead { color: var(--brown); margin-bottom: 28px; }
+
+.section-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 30px;
+  scroll-behavior: smooth;
+}
+.section-links .cta {
+  margin: 0;
+}
+
+.site [id] {
+  scroll-margin-top: 24px;
+}
 
 h2 {
   font-weight: 400;

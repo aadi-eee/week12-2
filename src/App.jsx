@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
+
 import PageTitleSync from "./components/PageTitleSync.jsx";
 import FetchUser from "./components/FetchUser.jsx";
 import Stopwatch from "./components/Stopwatch.jsx";
 import WeatherDashboard from "./components/WeatherDashboard.jsx";
 import GithubLookup from "./components/GithubLookup.jsx";
+import WeatherApp from "./components/WeatherApp.jsx";
 
 // ?raw gives the component's own source text, so "Show code" is always up to date
 import weatherSrc from "./components/WeatherDashboard.jsx?raw";
@@ -21,15 +24,46 @@ function Card({ id, tag, badge, title, text, code, children }) {
       </div>
       <p className="card-text">{text}</p>
       <div className="card-body">{children}</div>
-      <details className="example">
-        <summary>Show code</summary>
-        <pre><code>{code}</code></pre>
-      </details>
+      {code && (
+        <details className="example">
+          <summary>Show code</summary>
+          <pre><code>{code}</code></pre>
+        </details>
+      )}
     </article>
   );
 }
 
-export default function App() {
+/* ---------- Separate page: #/weather ---------- */
+function WeatherPage() {
+  return (
+    <main className="site">
+      <a className="back" href="#">← Back to Week 12_2</a>
+      <h1>
+        <span className="script">Weather</span> dashboard
+      </h1>
+      <p className="lead">
+        Search by city name or latitude/longitude and see the current temperature, wind speed and weather description from the Open-Meteo API. 
+        A useEffect refetches whenever the coordinates change, with loading and error states, plus auto-detecting your location with navigator. 
+      </p>
+
+      <div className="cards">
+        <Card
+          tag="Homework"
+          badge="☁"
+          title="Open-Meteo weather"
+          text="Current temperature, wind speed and conditions, with loading and error states."
+          code={weatherSrc}
+        >
+          <WeatherDashboard />
+        </Card>
+      </div>
+    </main>
+  );
+}
+
+/* ---------- Main page ---------- */
+function HomePage() {
   return (
     <main className="site wide">
       <h1>
@@ -39,19 +73,28 @@ export default function App() {
         Fetching live data in React: effects that rerun when values change, clean up after
         themselves, and cancel requests that are no longer needed.
       </p>
+      <nav className="section-links" aria-label="Jump to section">
+        <a className="cta" href="#weather">See weather dashboard</a>
+        <a className="cta" href="#github">See code challenge</a>
+        <a className="cta" href="#practice">See practice exercises</a>
+      </nav>
 
-      <h2>Homework & code challenge</h2>
+      <h2 id="code-challenge">Homework & code challenge</h2>
       <div className="cards">
-        <Card
-          id="weather"
-          tag="Homework"
-          badge="☁"
-          title="Weather dashboard"
-          text="Search by city or by latitude and longitude. A useEffect refetches whenever the coordinates change."
-          code={weatherSrc}
-        >
-          <WeatherDashboard />
-        </Card>
+        <article className="card" id="weather">
+          <span className="tag">Homework</span>
+          <div className="card-head">
+            <span className="badge" aria-hidden="true">☁</span>
+            <h2>Weather dashboard</h2>
+          </div>
+          <p className="card-text">
+            Search by city name or latitude/longitude and see the current temperature, 
+            wind speed and weather description from the Open-Meteo API. 
+          </p>
+          <div className="card-body">
+            <a className="cta" href="#/weather">Open weather dashboard</a>
+          </div>
+        </article>
 
         <Card
           id="github"
@@ -65,7 +108,7 @@ export default function App() {
         </Card>
       </div>
 
-      <h2>Practice exercises</h2>
+      <h2 id="practice">Practice exercises</h2>
       <div className="cards">
         <Card
           id="e1"
@@ -81,7 +124,7 @@ export default function App() {
           id="e2"
           badge="E2"
           title="Fetch a user from an API"
-          text="Loads jsonplaceholder user 1 once, when the component mounts."
+          text="Loads a JSONPlaceholder user and demonstrates rerunning effects, cleanup, cancellation, loading states and errors."
           code={e2Src}
         >
           <FetchUser />
@@ -99,4 +142,26 @@ export default function App() {
       </div>
     </main>
   );
+}
+
+export default function App() {
+  const [hash, setHash] = useState(window.location.hash);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const nextHash = window.location.hash;
+      setHash(nextHash);
+      if (nextHash === "#/weather") {
+        window.scrollTo(0, 0);
+      } else if (nextHash.startsWith("#")) {
+        requestAnimationFrame(() => {
+          document.querySelector(nextHash)?.scrollIntoView({ block: "start" });
+        });
+      }
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  return hash === "#/weather" ? <WeatherApp /> : <HomePage />;
 }
